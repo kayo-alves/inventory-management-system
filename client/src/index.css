@@ -4,11 +4,9 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
-
-  /* Propriedades para centralizar o card na tela */
-  background-color: #f0f2f5; /* Um cinza bem claro para o fundo */
+  background-color: #f0f2f5;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Garante que o body ocupe a altura toda da tela */
+  min-height: 100vh;
 }
