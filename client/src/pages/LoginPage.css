@@ -1,0 +1,78 @@
+/* src/pages/LoginPage.css */
+
+.login-container {
+    /* Dimensões e layout */
+    width: 1000px;
+    min-height: 600px;
+    display: flex;
+    /* <-- ESTA É A LINHA MAIS IMPORTANTE PARA O LAYOUT FUNCIONAR */
+
+    /* Estilo do card */
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Seção da direita (Branding) */
+.branding-section {
+    background-color: #4a0e1a;
+    background-image: url(../assets/backgroundLogin.png);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ajuste para a imagem do logo */
+.logo-image {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+}
+
+/* Seção da esquerda (Formulário) */
+.form-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Estilização customizada para o botão de Entrar */
+.btn-login {
+  background-color: #580C16 !important;
+  border-color: #580C16 !important;
+  
+  /* Essas propriedades geralmente não precisam, mas é uma boa prática adicionar por consistência */
+  font-weight: bold;
+  padding: 0.75rem;
+}
+
+/* Também é uma boa ideia definir a cor do hover */
+.btn-login:hover {
+    background-color: #4a0a12 !important; /* Um tom um pouco mais escuro */
+    border-color: #4a0a12 !important;
+}
+
+/* Estilização para o link "Esqueci a senha" */
+.forgot-password-link {
+    font-size: 0.9rem;
+    text-align: right;
+    width: 100%;
+    display: block;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
