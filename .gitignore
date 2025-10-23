@@ -24,7 +24,10 @@ lerna-debug.log*
 ai-rules.md
 feat-prod-regist-plan.md
 product-get-endpoint.plan.md
-/server/test-model.js
+/server/tests/test-model.js
+/server/test-db-connection.js
+/server/test-product-methods.js
+product-post-implement.md
 
 # Runtime data
 pids
