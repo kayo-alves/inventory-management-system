@@ -11,7 +11,7 @@ class ProductController {
                 'selling_price',
                 'cost_price',
                 'category',
-                'quantity_in_inventory'
+                'stock_quantity'
             ]
             const allowedSortOrder = ['ASC', 'DESC'];
 

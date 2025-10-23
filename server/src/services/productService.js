@@ -24,7 +24,7 @@ class ProductService {
                 bValue = new Date(bValue);
             }
 
-            if (sortBy === 'selling_price' || sortBy === 'cost_price' || sortBy === 'quantity_in_inventory') {
+            if (sortBy === 'selling_price' || sortBy === 'cost_price' || sortBy === 'stock_quantity') {
                 aValue = parseFloat(aValue);
                 bValue = parseFloat(bValue);
             }

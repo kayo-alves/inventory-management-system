@@ -49,7 +49,6 @@ class Product {
         }
     }
 
-
     /**
      * Create a product with its variations in a single transaction
      * @param {Object} parentData - Parent product data
@@ -81,7 +80,6 @@ class Product {
             const parentId = parentProduct.id
 
             // create all variations using parent ID
-
             const createdVariations = [];
             
             for (const variation of variationsArray) {

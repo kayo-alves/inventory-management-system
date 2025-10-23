@@ -9,8 +9,7 @@ class user {
             const query = `
                 INSERT INTO users (email, password, name, created_at)
                 VALUES ($1, $2, $3, now())
-                RETURNING id, email, name, created_at
-            `;
+                RETURNING id, email, name, created_at`;
 
             const result = await pool.query(query, [email, hashedPassword, name]);
             return result.rows[0];
