@@ -36,6 +36,63 @@ class ProductService {
             }
         });
     }
+
+    static async createProduct(productData) {
+        try {
+            //1. validate required field and data types
+            const validation = this.validateProductData(productData);
+            if (!validation.isValid) {
+                throw new Error (`Validation failed: ${validation.errors.join(', ')}`)
+            }
+            // 2. check sku uniqueness
+            const existingSku = await Product.findBySku(productData.sku)
+            if (existingSku) {
+                throw new Error('SKU already exists');
+            }
+
+            const createdProduct = await Product.create(productData);
+            return createdProduct;
+        } catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * Validate product data for required fields and data types
+     * @param {Object} data - Product data to validate
+     * @returns {Object} { isValid: boolean, errors: string[] }
+     */
+    static validateProductData(data) {
+        const errors = [];
+
+        // Check required fields
+        if (!data.sku || typeof data.sku !== 'string' || data.sku.trim() === '') {
+            errors.push('SKU is required and must be a non-empty string');
+        }
+        if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
+            errors.push('Name is required and must be a non-empty string');
+        }
+        if (!data.category || typeof data.category !== 'string' || data.category.trim() === '') {
+            errors.push('Category is required and must be a non-empty string');
+        }
+        // Check numeric fields
+        if (typeof data.selling_price !== 'number' || data.selling_price <= 0) {
+            errors.push('Selling price must be a positive number');
+        }
+        if (typeof data.cost_price !== 'number' || data.cost_price <= 0) {
+            errors.push('Cost price must be a positive number');
+        }
+        if (typeof data.stock_quantity !== 'number' || data.stock_quantity < 0) {
+            errors.push('Stock quantity must be a non-negative number');
+        }
+        // Check business rules
+        if (data.selling_price && data.cost_price && data.selling_price <= data.cost_price) {
+            errors.push('Selling price must be greater than cost price');
+        }
+        return {
+            isValid: errors.length === 0,
+            errors: errors
+        };
+    }
 }
 
 module.exports = ProductService
