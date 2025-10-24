@@ -26,7 +26,7 @@ class Product {
 
     static async findBySku (sku) {
         try {
-            const query = 'SELECT id, sku, name, selling_price, cost_price, category, stock_quantity, created_at from products where sku = $1';
+            const query = `SELECT p.*, v.* FROM products p LEFT JOIN product_variations v ON p.id = v.parent_product_id WHERE p.sku = $1 OR v.sku = $1;`;
             const result = await pool.query(query, [sku])
             return result.rows[0]
         } catch (error) {
