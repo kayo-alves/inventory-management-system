@@ -39,15 +39,16 @@ class ProductService {
 
     static async createProduct(productData) {
         try {
-            //1. validate required field and data types
-            const validation = this.validateProductData(productData);
-            if (!validation.isValid) {
-                throw new Error (`Validation failed: ${validation.errors.join(', ')}`)
-            }
-            // 2. check sku uniqueness
+            // 1. check sku uniqueness
             const existingSku = await Product.findBySku(productData.sku)
             if (existingSku) {
                 throw new Error('SKU already exists');
+            }
+
+            //2. validate required field and data types
+            const validation = this.validateProductData(productData);
+            if (!validation.isValid) {
+                throw new Error (`Validation failed: ${validation.errors.join(', ')}`)
             }
 
             const createdProduct = await Product.create(productData);
@@ -56,6 +57,45 @@ class ProductService {
             throw error;
         }
     }
+
+    static async createProductWithVariations(ParentData, variationsArray) {
+        try {
+            // 1. check sku uniqueness
+            const existingParentSku = await Product.findBySku(ParentData.sku)
+            if (existingParentSku) {
+                throw new Error(`Parent SKU ${ParentData.sku} already exists`);
+            }
+
+            // 2. validate required field and data types
+            const parentValidation = this.validateProductData(ParentData);
+            if (!parentValidation.isValid) {
+                throw new Error (`Parent Validation failed: ${parentValidation.errors.join(', ')}`)
+            }
+
+            // 3. Validate variations array
+            if (!variationsArray || variationsArray.length === 0) {
+                throw new Error('At least one variation is required');
+            }
+
+            for (const variation of variationsArray) {
+                const existingVariationSku = await Product.findBySku(variation.sku)
+                if (existingVariationSku) {
+                    throw new Error(`Variation SKU ${variation.sku} already exists`);
+                }
+
+                const variationValidation = this.validateProductData(variation)
+                if (!variationValidation.isValid) {
+                    throw new Error (`Validation of ${variation.sku} failed: ${variationValidation.errors.join(', ')}`)
+                }
+            }
+
+            const createdProductWithVariations = await Product.createWithVariations(ParentData, variationsArray);
+            return createdProductWithVariations;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     /**
      * Validate product data for required fields and data types
      * @param {Object} data - Product data to validate
