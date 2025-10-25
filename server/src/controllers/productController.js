@@ -38,6 +38,76 @@ class ProductController {
             });
         }
     }
+
+    static async create (req, res) {
+        try {
+            const { sku, name, selling_price, cost_price, category, stock_quantity, variations } = req.body;
+             
+            const productData = { sku, name, selling_price, cost_price, category, stock_quantity };
+
+            const validation = ProductService.validateProductData(productData);
+
+             // Add debug logging
+            console.log('🔍 Debug - Validation result:', validation);
+            console.log('🔍 Debug - Is valid:', validation.isValid);
+            console.log('🔍 Debug - Errors:', validation.errors);
+            
+            if (!validation.isValid) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Validation Failed: ${validation.errors.join(', ')}`
+                })
+            }
+
+            let result;
+            if (variations && variations.length > 0) {
+                // validade each variations
+                for (const variation of variations) {
+                    const variationValidation = ProductService.validateProductData(variation, true);
+                    if (!variationValidation.isValid) {
+                        return res.status(400).json({
+                            success: false,
+                            message: `Variation ${variation.sku} validation failed:  ${variationValidation.errors.join(', ')}`
+                        });
+                    }
+                }
+
+                // create product with variations
+                result = await ProductService.createProductWithVariations(productData, variations);
+            } else {
+                // create simple product 
+                result = await ProductService.createProduct(productData);
+            }
+
+            // success response
+            return res.status(201).json({
+                success: true,
+                message: 'Product created successfully',
+                data: result
+            });
+        } catch (error) {
+            // validate different types of errors
+            if (error.message.includes('already exists')) {
+                return res.status(400).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+    
+            if (error.message.includes('Validation failed')) {
+                return res.status(400).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+    
+            // 7. Handle server errors
+            return res.status(500).json({
+                success: false,
+                message: error.message || 'Internal server error'
+            });
+        }
+    }
 }
 
 module.exports = ProductController;
