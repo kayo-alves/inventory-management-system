@@ -67,7 +67,7 @@ class ProductService {
             }
 
             // 2. validate required field and data types
-            const parentValidation = this.validateProductData(ParentData);
+            const parentValidation = this.validateProductData(ParentData, false);
             if (!parentValidation.isValid) {
                 throw new Error (`Parent Validation failed: ${parentValidation.errors.join(', ')}`)
             }
@@ -83,7 +83,7 @@ class ProductService {
                     throw new Error(`Variation SKU ${variation.sku} already exists`);
                 }
 
-                const variationValidation = this.validateProductData(variation)
+                const variationValidation = this.validateProductData(variation, true)
                 if (!variationValidation.isValid) {
                     throw new Error (`Validation of ${variation.sku} failed: ${variationValidation.errors.join(', ')}`)
                 }
@@ -101,7 +101,7 @@ class ProductService {
      * @param {Object} data - Product data to validate
      * @returns {Object} { isValid: boolean, errors: string[] }
      */
-    static validateProductData(data) {
+    static validateProductData(data, isVariation = False) {
         const errors = [];
 
         // Check required fields
@@ -111,8 +111,11 @@ class ProductService {
         if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
             errors.push('Name is required and must be a non-empty string');
         }
-        if (!data.category || typeof data.category !== 'string' || data.category.trim() === '') {
-            errors.push('Category is required and must be a non-empty string');
+        // Only require category for parent products, not variations
+        if (!isVariation) {
+            if (!data.category || typeof data.category !== 'string' || data.category.trim() === '') {
+                errors.push('Category is required for parent product and must be a non-empty string');
+            }
         }
         // Check numeric fields
         if (typeof data.selling_price !== 'number' || data.selling_price <= 0) {
