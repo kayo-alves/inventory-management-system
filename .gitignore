@@ -21,6 +21,14 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+ai-rules.md
+feat-prod-regist-plan.md
+product-get-endpoint.plan.md
+/server/tests/test-model.js
+/server/test-db-connection.js
+/server/test-product-methods.js
+product-post-implement.md
+
 # Runtime data
 pids
 *.pid
