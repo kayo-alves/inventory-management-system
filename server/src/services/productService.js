@@ -45,12 +45,6 @@ class ProductService {
                 throw new Error('SKU already exists');
             }
 
-            //2. validate required field and data types
-            const validation = this.validateProductData(productData);
-            if (!validation.isValid) {
-                throw new Error (`Validation failed: ${validation.errors.join(', ')}`)
-            }
-
             const createdProduct = await Product.create(productData);
             return createdProduct;
         } catch (error) {
@@ -65,14 +59,7 @@ class ProductService {
             if (existingParentSku) {
                 throw new Error(`Parent SKU ${ParentData.sku} already exists`);
             }
-
-            // 2. validate required field and data types
-            const parentValidation = this.validateProductData(ParentData, false);
-            if (!parentValidation.isValid) {
-                throw new Error (`Parent Validation failed: ${parentValidation.errors.join(', ')}`)
-            }
-
-            // 3. Validate variations array
+            // 2. Validate variations array
             if (!variationsArray || variationsArray.length === 0) {
                 throw new Error('At least one variation is required');
             }
@@ -81,11 +68,6 @@ class ProductService {
                 const existingVariationSku = await Product.findBySku(variation.sku)
                 if (existingVariationSku) {
                     throw new Error(`Variation SKU ${variation.sku} already exists`);
-                }
-
-                const variationValidation = this.validateProductData(variation, true)
-                if (!variationValidation.isValid) {
-                    throw new Error (`Validation of ${variation.sku} failed: ${variationValidation.errors.join(', ')}`)
                 }
             }
 
@@ -101,7 +83,7 @@ class ProductService {
      * @param {Object} data - Product data to validate
      * @returns {Object} { isValid: boolean, errors: string[] }
      */
-    static validateProductData(data, isVariation = False) {
+    static validateProductData(data, isVariation = false) {
         const errors = [];
 
         // Check required fields
