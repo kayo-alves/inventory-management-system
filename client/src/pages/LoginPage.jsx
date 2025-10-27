@@ -1,5 +1,3 @@
-// src/pages/LoginPage.jsx
-
 import { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Form, Button, Image } from 'react-bootstrap'; 
@@ -25,8 +23,8 @@ function LoginPage() {
       alert('Login realizado com sucesso!');
 
       // Próximos passos: salvar o token e redirecionar
-      // localStorage.setItem('token', response.data.data.token);
-      // window.location.href = '/dashboard';
+      localStorage.setItem('token', response.data.data.token);
+      window.location.href = '/index';
 
     } catch (error) {
       console.error('Erro no login:', error.response.data.message);
