@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Form, Button, Image } from 'react-bootstrap'; 
 import './LoginPage.css';
-import logoEstilo from '../assets/logoEstilo.png';
+import logoEstilo from '../../assets/logoEstilo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
@@ -20,7 +20,7 @@ function LoginPage() {
       });
 
       console.log('Login com sucesso!', response.data);
-      alert('Login realizado com sucesso!');
+      //alert('Login realizado com sucesso!');
 
       // Próximos passos: salvar o token e redirecionar
       localStorage.setItem('token', response.data.data.token);

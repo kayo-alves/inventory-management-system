@@ -1,6 +1,7 @@
 import { Row, Col, Form, Button, Image } from 'react-bootstrap'; 
 import './IndexPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from "react-router-dom";
 
 function IndexPage() {
     return (
@@ -10,7 +11,11 @@ function IndexPage() {
               <div className="content-container">
                 <h2 className='text-center'>Página Inicial</h2>
                 <p className="text-muted mb-4">Bem-vindo ao sistema de gerenciamento de inventário!</p>
-                            
+                <Link to="/testeProduto">
+                    <Button size="lg" variant="danger" className="mx-2">
+                    Gerenciar Produtos
+                    </Button>
+                </Link>                        
               </div>
             </Col>
           </Row>
