@@ -4,19 +4,35 @@ class Product {
     static async findAll() {
         try {
             const query = `
-                SELECT 
-                    id,
-                    sku,
-                    name,
-                    selling_price,
-                    cost_price,
-                    category,
-                    stock_quantity,
-                    created_at
-                FROM products 
-                ORDER BY created_at DESC
+                SELECT
+                    p.id,
+                    p.sku,
+                    p.name,
+                    p.selling_price,
+                    p.cost_price,
+                    p.category,
+                    p.stock_quantity,
+                    p.created_at,
+                    json_agg(
+                        json_build_object(
+                            'id', v.id,
+                            'sku', v.sku,
+                            'name', v.name,
+                            'selling_price', v.selling_price,
+                            'cost_price', v.cost_price,
+                            'stock_quantity', v.stock_quantity,
+                            'created_at', v.created_at
+                        )
+                    ) FILTER (WHERE v.id IS NOT NULL) AS variations
+                    FROM
+                        products p
+                    LEFT JOIN
+                        product_variations v ON p.id = v.parent_product_id
+                    GROUP BY
+                        p.id
+                    ORDER BY
+                        p.created_at DESC
             `;
-
             const result = await pool.query(query);
             return result.rows;
         } catch (error) {
@@ -57,10 +73,8 @@ class Product {
      */
     static async createWithVariations (parentData, variationsArray) {
         const client = await pool.connect();
-
         try {
             await client.query('BEGIN');
-
             const parentQuery = `
                 INSERT INTO products (sku, name, selling_price, cost_price, category, stock_quantity)
                 VALUES ($1, $2, $3, $4, $5, $6)
@@ -81,7 +95,6 @@ class Product {
 
             // create all variations using parent ID
             const createdVariations = [];
-            
             for (const variation of variationsArray) {
                 const variationQuery = `
                     INSERT INTO product_variations (parent_product_id, sku, name, selling_price, cost_price, stock_quantity)
@@ -97,7 +110,6 @@ class Product {
                     variation.cost_price,
                     variation.stock_quantity
                 ]);
-
                 createdVariations.push(variationResult.rows[0]);
             }
 
