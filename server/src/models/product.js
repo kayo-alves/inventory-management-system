@@ -10,28 +10,30 @@ class Product {
                     p.name,
                     p.selling_price,
                     p.cost_price,
-                    p.category,
+                    c.name AS category,
                     p.stock_quantity,
                     p.created_at,
                     json_agg(
                         json_build_object(
-                            'id', v.id,
-                            'sku', v.sku,
-                            'name', v.name,
-                            'selling_price', v.selling_price,
-                            'cost_price', v.cost_price,
-                            'stock_quantity', v.stock_quantity,
-                            'created_at', v.created_at
+                        'id', v.id,
+                        'sku', v.sku,
+                        'name', v.name,
+                        'selling_price', v.selling_price,
+                        'cost_price', v.cost_price,
+                        'stock_quantity', v.stock_quantity,
+                        'created_at', v.created_at
                         )
                     ) FILTER (WHERE v.id IS NOT NULL) AS variations
-                    FROM
-                        products p
-                    LEFT JOIN
-                        product_variations v ON p.id = v.parent_product_id
-                    GROUP BY
-                        p.id
-                    ORDER BY
-                        p.created_at DESC
+                FROM
+                products p
+                LEFT JOIN
+                product_variations v ON p.id = v.parent_product_id
+                LEFT JOIN
+                category c ON p.category_id = c.id
+                GROUP BY
+                p.id, c.name
+                ORDER BY
+                p.created_at DESC;
             `;
             const result = await pool.query(query);
             return result.rows;
@@ -50,14 +52,14 @@ class Product {
         }
     }
 
-    static async create({sku, name, selling_price, cost_price, category, stock_quantity}) {
+    static async create({sku, name, selling_price, cost_price, category_id, stock_quantity}) {
         try {
             const query = `
-                INSERT INTO products (sku, name, selling_price, cost_price, category, stock_quantity)
+                INSERT INTO products (sku, name, selling_price, cost_price, category_id, stock_quantity)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING id, sku, name, selling_price, cost_price, category, stock_quantity, created_at`;
+                RETURNING id, sku, name, selling_price, cost_price, category_id,, stock_quantity, created_at`;
 
-            const result = await pool.query(query, [sku, name, selling_price, cost_price, category, stock_quantity])
+            const result = await pool.query(query, [sku, name, selling_price, cost_price, category_id,, stock_quantity])
             return result.rows[0]
         } catch (error) {
             throw error;
@@ -76,9 +78,9 @@ class Product {
         try {
             await client.query('BEGIN');
             const parentQuery = `
-                INSERT INTO products (sku, name, selling_price, cost_price, category, stock_quantity)
+                INSERT INTO products (sku, name, selling_price, cost_price, category_id, stock_quantity)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING id, sku, name, selling_price, cost_price, category, stock_quantity, created_at
+                RETURNING id, sku, name, selling_price, cost_price, category_id,, stock_quantity, created_at
             `;
 
             const parentResult = await client.query(parentQuery, [
@@ -86,7 +88,7 @@ class Product {
                 parentData.name,
                 parentData.selling_price,
                 parentData.cost_price,
-                parentData.category,
+                parentData.category_id,,
                 parentData.stock_quantity
             ]);
 

@@ -95,8 +95,9 @@ class ProductService {
         }
         // Only require category for parent products, not variations
         if (!isVariation) {
-            if (!data.category || typeof data.category !== 'string' || data.category.trim() === '') {
-                errors.push('Category is required for parent product and must be a non-empty string');
+            const idNum = Number(data.category_id);
+            if (!Number.isInteger(idNum) || idNum <= 0) {
+                errors.push('category_id is required for parent product and must be a positive integer');
             }
         }
         // Check numeric fields
