@@ -41,16 +41,11 @@ class ProductController {
 
     static async create (req, res) {
         try {
-            const { sku, name, selling_price, cost_price, category, stock_quantity, variations } = req.body;
+            const { sku, name, selling_price, cost_price, category_id, stock_quantity, variations } = req.body;
              
-            const productData = { sku, name, selling_price, cost_price, category, stock_quantity };
+            const productData = { sku, name, selling_price, cost_price, category_id, stock_quantity };
 
             const validation = ProductService.validateProductData(productData);
-
-             // Add debug logging
-            console.log('🔍 Debug - Validation result:', validation);
-            console.log('🔍 Debug - Is valid:', validation.isValid);
-            console.log('🔍 Debug - Errors:', validation.errors);
             
             if (!validation.isValid) {
                 return res.status(400).json({
