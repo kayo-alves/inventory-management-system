@@ -7,15 +7,13 @@ import {
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import "./TesteProduto.css"; // adicionaremos o CSS logo abaixo
+import "./TesteProduto.css";
 
 function TesteProduto() {
   const [groupedProducts, setGroupedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedRows, setExpandedRows] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -30,9 +28,7 @@ function TesteProduto() {
         const response = await axios.get(
           "http://localhost:3000/api/v1/products",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -54,10 +50,6 @@ function TesteProduto() {
     }));
   };
 
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentProducts = groupedProducts.slice(indexOfFirst, indexOfLast);
-
   if (loading)
     return (
       <div className="container mt-4">
@@ -73,32 +65,31 @@ function TesteProduto() {
     );
 
   return (
-    <div className="container mt-4">
-      <h3>Produtos</h3>
-      <div className="tabela-produtos table-responsive mt-3">
-        <Table bordered hover>
-          <thead className="table-header">
+    <div className="container w-100 mt-5">
+      <div className="tabela-container shadow-sm rounded-3 p-3 bg-white">
+        <Table hover borderless responsive className="align-middle tabela-produtos">
+          <thead>
             <tr>
-              <th></th>
+              <th style={{ width: "40px" }}></th>
               <th>ID</th>
               <th>SKU</th>
               <th>Nome do Produto</th>
-              <th>Preço de Venda</th>
+              <th className="text-end">Preço de Venda</th>
               <th>Categoria</th>
               <th>Estoque</th>
-              <th>Ações</th>
+              <th className="text-center">Ações</th>
             </tr>
           </thead>
           <tbody>
-            {currentProducts.map((product) => (
+            {groupedProducts.map((product) => (
               <React.Fragment key={product.id}>
-                <tr>
-                  <td className="toggle-btn text-center">
+                <tr className="linha-principal">
+                  <td className="text-center">
                     {product.variations?.length > 0 && (
                       <Button
                         variant="link"
+                        className="p-0 toggle-icon"
                         onClick={() => toggleRow(product.id)}
-                        className="p-0"
                       >
                         <FontAwesomeIcon
                           icon={
@@ -111,9 +102,9 @@ function TesteProduto() {
                     )}
                   </td>
                   <td>{product.id}</td>
-                  <td>{product.sku}</td>
+                  <td className="text-muted">{product.sku}</td>
                   <td>{product.name}</td>
-                  <td>
+                  <td className="text-end ">
                     {new Intl.NumberFormat("pt-BR", {
                       style: "currency",
                       currency: "BRL",
@@ -128,12 +119,12 @@ function TesteProduto() {
 
                 {expandedRows[product.id] &&
                   product.variations?.map((variation) => (
-                    <tr key={variation.id} className="variation-row">
+                    <tr key={variation.id} className="linha-variacao">
                       <td></td>
-                      <td>{variation.id}</td>
-                      <td>{variation.sku}</td>
+                      <td className="text-muted">{variation.id}</td>
+                      <td className="text-muted">{variation.sku}</td>
                       <td>{variation.name}</td>
-                      <td>
+                      <td className="text-end">
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
@@ -150,43 +141,6 @@ function TesteProduto() {
             ))}
           </tbody>
         </Table>
-
-        {/* Paginação */}
-        <div className="pagination-container">
-          <Button
-            variant="light"
-            size="sm"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => p - 1)}
-          >
-            Anterior
-          </Button>
-
-          {[...Array(Math.ceil(groupedProducts.length / itemsPerPage)).keys()].map(
-            (num) => (
-              <Button
-                key={num + 1}
-                variant={currentPage === num + 1 ? "dark" : "light"}
-                size="sm"
-                className="mx-1"
-                onClick={() => setCurrentPage(num + 1)}
-              >
-                {num + 1}
-              </Button>
-            )
-          )}
-
-          <Button
-            variant="light"
-            size="sm"
-            disabled={
-              currentPage === Math.ceil(groupedProducts.length / itemsPerPage)
-            }
-            onClick={() => setCurrentPage((p) => p + 1)}
-          >
-            Próximo
-          </Button>
-        </div>
       </div>
     </div>
   );
