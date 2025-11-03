@@ -42,7 +42,7 @@ class Product {
         }
     }
 
-    static async findBySku (sku) {
+    static async findBySku(sku) {
         try {
             const query = `SELECT p.*, v.* FROM products p LEFT JOIN product_variations v ON p.id = v.parent_product_id WHERE p.sku = $1 OR v.sku = $1;`;
             const result = await pool.query(query, [sku])
@@ -52,18 +52,18 @@ class Product {
         }
     }
 
-    static async create({sku, name, selling_price, cost_price, category_id, stock_quantity}) {
+    static async create({ sku, name, selling_price, cost_price, category_id, stock_quantity }) {
         try {
             const query = `
                 INSERT INTO products (sku, name, selling_price, cost_price, category_id, stock_quantity)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING id, sku, name, selling_price, cost_price, category_id,, stock_quantity, created_at`;
+                RETURNING id, sku, name, selling_price, cost_price, category_id, stock_quantity, created_at`;
 
-            const result = await pool.query(query, [sku, name, selling_price, cost_price, category_id,, stock_quantity])
+            const result = await pool.query(query, [sku, name, selling_price, cost_price, category_id, , stock_quantity])
             return result.rows[0]
         } catch (error) {
             throw error;
-            
+
         }
     }
 
@@ -73,7 +73,7 @@ class Product {
      * @param {Array} variationsArray - Array of variation objects
      * @returns {Object} Parent product with nested variations array
      */
-    static async createWithVariations (parentData, variationsArray) {
+    static async createWithVariations(parentData, variationsArray) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
@@ -88,7 +88,7 @@ class Product {
                 parentData.name,
                 parentData.selling_price,
                 parentData.cost_price,
-                parentData.category_id,,
+                parentData.category_id, ,
                 parentData.stock_quantity
             ]);
 
