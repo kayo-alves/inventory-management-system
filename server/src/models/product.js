@@ -59,7 +59,7 @@ class Product {
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING id, sku, name, selling_price, cost_price, category_id, stock_quantity, created_at`;
 
-            const result = await pool.query(query, [sku, name, selling_price, cost_price, category_id, , stock_quantity])
+            const result = await pool.query(query, [sku, name, selling_price, cost_price, category_id, stock_quantity])
             return result.rows[0]
         } catch (error) {
             throw error;
@@ -80,7 +80,7 @@ class Product {
             const parentQuery = `
                 INSERT INTO products (sku, name, selling_price, cost_price, category_id, stock_quantity)
                 VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING id, sku, name, selling_price, cost_price, category_id,, stock_quantity, created_at
+                RETURNING id, sku, name, selling_price, cost_price, category_id, stock_quantity, created_at
             `;
 
             const parentResult = await client.query(parentQuery, [
@@ -88,7 +88,7 @@ class Product {
                 parentData.name,
                 parentData.selling_price,
                 parentData.cost_price,
-                parentData.category_id, ,
+                parentData.category_id,
                 parentData.stock_quantity
             ]);
 

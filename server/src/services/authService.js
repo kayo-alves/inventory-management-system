@@ -11,7 +11,7 @@ class authService {
 
             const newUser = await User.create(userData);
 
-            const token = this.generateToken(newUser.id);
+            const token = this.generateToken(newUser);
 
             return {
                 user: {
@@ -39,7 +39,7 @@ class authService {
           throw new Error('Invalid credentials');
         }
 
-        const token = this.generateToken(foundUser.id);
+        const token = this.generateToken(foundUser);
         return {
           user: {
             user: foundUser.id,
@@ -53,9 +53,9 @@ class authService {
       }
   }
 
-    static generateToken(userId) {
+    static generateToken(user) {
         return jwt.sign(
-          { userId },
+          { userId: user.id, email: user.email, name: user.name },
           process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRES_IN }
         );

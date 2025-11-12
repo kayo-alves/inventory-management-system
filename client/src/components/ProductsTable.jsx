@@ -112,7 +112,7 @@ function ProductsTable() {const [groupedProducts, setGroupedProducts] = useState
                       currency: "BRL",
                     }).format(product.selling_price)}</td>
                     <td>{product.category}</td>
-                    <td>{product.stock_quantity}</td>
+                    <td >{product.stock_quantity}</td>
                     <td className="text-center">
                     <FontAwesomeIcon icon={faCog} />
                   </td>
