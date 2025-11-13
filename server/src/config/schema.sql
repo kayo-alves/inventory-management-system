@@ -1,3 +1,12 @@
+-- Tabela de Usuários
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Tabela de Categorias
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
