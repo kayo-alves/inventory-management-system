@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faChevronUp, faChevronDown, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faChevronUp, faChevronDown, faCog } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-function ProductsTable() {const [groupedProducts, setGroupedProducts] = useState([]);
+function ProductsTable() {
+  const [groupedProducts, setGroupedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedRows, setExpandedRows] = useState({});
@@ -65,7 +66,7 @@ function ProductsTable() {const [groupedProducts, setGroupedProducts] = useState
         <Alert variant="danger">{error}</Alert>
       </div>
     );
-  return ( 
+  return (
     <div className="card shadow-sm h-100 w-100" style={{ minHeight: "calc(100vh - 210px)" }}>
       <div className="card-body d-flex flex-column">
         <div className="table-responsive flex-grow-1">
@@ -73,71 +74,73 @@ function ProductsTable() {const [groupedProducts, setGroupedProducts] = useState
             <thead>
               <tr>
                 <th></th>
-              <th>ID</th>
-              <th>SKU</th>
-              <th>Nome do Produto</th>
-              <th>Preço de Venda</th>
-              <th>Categoria</th>
-              <th>Estoque</th>
-              <th>Ações</th>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>Nome do Produto</th>
+                <th>Preço de Venda</th>
+                <th>Categoria</th>
+                <th>Estoque</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
               {currentProducts.map((product) => (
-              <React.Fragment key={product.id}>
+                <React.Fragment key={product.id}>
                   <tr>
                     <td>
-                        {product.variations?.length > 0 && (
-                      <Button
-                        variant="link"
-                        onClick={() => toggleRow(product.id)}
-                        className="p-0"
-                      >
-                        <FontAwesomeIcon
-                          icon={
-                            expandedRows[product.id]
-                              ? faChevronUp
-                              : faChevronDown
-                          }
-                        />
-                      </Button>
-                    )}
+                      {product.variations?.length > 0 && (
+                        <Button
+                          variant="link"
+                          onClick={() => toggleRow(product.id)}
+                          className="p-0"
+                        >
+                          <FontAwesomeIcon
+                            icon={
+                              expandedRows[product.id]
+                                ? faChevronUp
+                                : faChevronDown
+                            }
+                          />
+                        </Button>
+                      )}
                     </td>
                     <td>{product.id}</td>
                     <td>{product.sku}</td>
                     <td>{product.name}</td>
-                    <td>                    
-                    {new Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(product.selling_price)}</td>
+                    <td>
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(product.selling_price)}</td>
                     <td>{product.category}</td>
-                    <td >{product.stock_quantity}</td>
+                    <td >
+                      {product.stock_quantity == 0 ? <span>-</span> : <span>{product.stock_quantity}</span>}
+                    </td>
                     <td className="text-center">
-                    <FontAwesomeIcon icon={faCog} />
-                  </td>
+                      <FontAwesomeIcon icon={faCog} />
+                    </td>
                   </tr>
 
                   {expandedRows[product.id] &&
-                  product.variations?.map((variation) => (
-                    <tr key={variation.id} className="variation-row">
-                      <td></td>
-                      <td>{variation.id}</td>
-                      <td>{variation.sku}</td>
-                      <td>{variation.name}</td>
-                      <td>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(variation.selling_price)}
-                      </td>
-                      <td>{product.category}</td>
-                      <td>{variation.stock_quantity}</td>
-                      <td className="text-center">
-                        <FontAwesomeIcon icon={faCog} />
-                      </td>
-                    </tr>
-                  ))}
+                    product.variations?.map((variation) => (
+                      <tr key={variation.id} className="variation-row">
+                        <td></td>
+                        <td>{variation.id}</td>
+                        <td>{variation.sku}</td>
+                        <td>{variation.name}</td>
+                        <td>
+                          {new Intl.NumberFormat("pt-BR", {
+                            style: "currency",
+                            currency: "BRL",
+                          }).format(variation.selling_price)}
+                        </td>
+                        <td>{product.category}</td>
+                        <td>{variation.stock_quantity}</td>
+                        <td className="text-center">
+                          <FontAwesomeIcon icon={faCog} />
+                        </td>
+                      </tr>
+                    ))}
                 </React.Fragment>
               ))}
             </tbody>
@@ -181,5 +184,5 @@ function ProductsTable() {const [groupedProducts, setGroupedProducts] = useState
         </div>
       </div>
     </div>
-    );
-}export default ProductsTable;
+  );
+} export default ProductsTable;
