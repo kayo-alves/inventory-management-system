@@ -1,0 +1,159 @@
+:root{
+  --sidebar-bg: #6f0f17;
+  --sidebar-width: 260px; /* Aumentei um pouco para um visual melhor */
+}
+
+/* ===== GERAL / TOPBAR ===== */
+.app-root { min-height: 100vh; display: flex; }
+.content { background: #f6f6f6; min-height: 100vh; color: #222; flex-grow: 1; }
+
+.topbar { border-bottom: 1px solid rgba(0,0,0,0.06); background: #fff; 
+}
+.top-bar .form-control, .topbar .form-control {
+  height: 35px;
+  font-size: 15px;
+  max-width: 300px;
+  border-radius: 100px;
+  
+}
+.project-title { font-weight: 800; }
+
+.custom-profile { margin-left: 10px; margin-right: auto; }
+.avatar { width: 40px; height: 40px; font-weight: 700; }
+
+/* ===== SIDEBAR BASE & ESTILOS ===== */
+.sidebar {
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  background-color: var(--sidebar-bg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+
+  background-image: url("..//assets/backgroundLogin.png");
+  
+  /* Adiciona transição para o movimento suave (mobile) */
+  transition: transform 0.3s ease-in-out, left 0.3s ease-in-out; 
+}
+.logo-img { width: 150px; height: auto; border-radius: 10px; display: block; margin: 0 auto; }
+
+.sidebar .nav-link {
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  padding: 8px 15px; /* Ajusta padding */
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+}
+
+/* ===== ESTILOS DE TABELA E CARD ===== */
+.card { border-radius: 12px; border: none; }
+.table thead th { font-weight: 600; border-bottom: 2px solid rgba(0,0,0,0.05); }
+.table td, .table th { vertical-align: middle; }
+
+.d-flex.align-items-center.gap-2 button {
+  font-size: 15px;
+  border-radius: 25px;
+  width: 150px;
+}
+
+/* Estilo para o botão de "Criar Produto" */
+/* Usamos a classe .btn combinada com .text-white para garantir especificidade */
+.d-flex.align-items-center.gap-2 .btn.text-white {
+  /* Cor de Fundo */
+  background-color: var(--sidebar-bg, #580C16) !important; 
+  /* Cor da Borda */
+  border-color: var(--sidebar-bg, #580C16) !important;
+  /* Cor do Texto (já é branco, mas bom reforçar) */
+  color: white !important;
+}
+
+/* Estilo para o efeito de "hover" (passar o mouse) */
+.d-flex.align-items-center.gap-2 .btn.text-white:hover {
+  /* Escurecemos um pouco a cor para dar feedback visual */
+  background-color: #8c242c !important; 
+  border-color: #8c242c !important;
+}
+
+.table-responsive { overflow-x: auto; } /* Garante que a tabela seja scrollável em telas pequenas */
+
+.page-link {
+  background-color: white;
+  color: #580C16;
+  border: 1px solid #580C16;
+  padding: 5px  ;
+}
+
+.page-link:hover {
+  background-color: #580C16;
+  color: white;
+}
+
+.page-item.active .page-link {
+  background-color: #580C16;
+  color: white;
+  border: 1px solid #580C16;
+}
+
+.page-item.disabled .page-link {
+  background-color: white;
+  color: #ccc;
+  border: 1px solid #ccc;
+  pointer-events: none;
+}
+
+
+
+/* ===== ESTILOS RESPONSIVOS PARA MENU DESLIZANTE ===== */
+
+/* 1. Desktop (Largura Mínima 992px, que é o 'lg' do Bootstrap) */
+@media (min-width: 992px) {
+  .sidebar {
+    position: relative; /* Fica no fluxo normal do documento */
+    transform: translateX(0); /* Garante que não há transformações */
+    left: 0;
+  }
+  .sidebar-overlay { display: none !important; }
+}
+
+/* 2. Mobile/Tablet (Largura Máxima 991px) */
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: fixed; /* Sobrepõe o conteúdo */
+    top: 0;
+    left: 0; /* Começa na borda esquerda */
+    height: 100vh;
+    z-index: 1050; /* Z-index alto para sobrepor tudo */
+    
+    /* Esconde a sidebar fora da tela por padrão */
+    transform: translateX(calc(var(--sidebar-width) * -1)); 
+    box-shadow: 4px 0 10px rgba(0,0,0,0.2);
+  }
+
+  /* Aplica a classe 'open' para deslizar a sidebar para dentro */
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Estilo para o Overlay escuro */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040; /* Z-index entre o content e a sidebar */
+  }
+
+  /* Ajustes de layout para mobile */
+  .topbar .top-bar .profile .d-none.d-sm-block {
+    display: none !important; /* Oculta nome/email em mobile */
+  }
+  .topbar .top-bar .profile .me-3 {
+    margin-right: 0 !important;
+  }
+}

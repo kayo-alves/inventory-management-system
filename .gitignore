@@ -5,7 +5,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
 # Environment variables
 .env
 .env.local
@@ -21,6 +20,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+ai-rules.md
+feat-prod-regist-plan.md
+product-get-endpoint.plan.md
+/server/tests/test-model.js
+/server/test-db-connection.js
+/server/test-product-methods.js
+product-post-implement.md
 
 # Runtime data
 pids
@@ -123,9 +130,6 @@ Desktop.ini
 *.sqlite3
 *.db
 
-# Vite cache
-.vite/
-
 # Build outputs
 build/
 dist/
@@ -140,40 +144,6 @@ coverage/
 *.swp
 *.swo
 
-# Lock files (choose one based on your package manager)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Runtime and process files
-*.pem
-*.key
-*.crt
-
-# Local development
-.env.local
-.env.development
-.env.production
-
-# Backup files
-*.bak
-*.backup
-*~
-
-# Docker
-Dockerfile.local
-docker-compose.override.yml
-.dockerignore
-
-# Testing
-.jest/
-__tests__/coverage/
-
-# Misc
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
+# Package lock files (optional - some teams prefer to track these)
+# package-lock.json
+# yarn.lock
